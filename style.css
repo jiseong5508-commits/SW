@@ -1,0 +1,635 @@
+/* --- CSS Variables & Reset --- */
+:root {
+    --bg-dark: #f5f5f7;
+    --bg-panel: #ffffff;
+    --border-neon: #e5e5ea;
+    
+    /* Sleek Light Theme Accent Colors */
+    --neon-cyan: #0066cc; /* Deep Indigo/Blue for high visibility */
+    --neon-cyan-glow: rgba(0, 102, 204, 0.15);
+    --neon-purple: #8e2de2;
+    --neon-pink: #ff2d55; /* Target core red */
+    --neon-green: #34c759;
+    
+    /* Text Colors */
+    --text-main: #1d1d1f; /* Charcoal Black */
+    --text-muted: #86868b; /* Muted slate gray */
+    
+    /* Typography */
+    --font-family: 'Inter', -apple-system, sans-serif;
+    
+    /* UI Config */
+    --border-radius-lg: 16px;
+    --border-radius-md: 10px;
+    --transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-family);
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- App Layout --- */
+#app-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+}
+
+#game-container {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* Professional 16:9 ratio gaming zone */
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-neon);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- Screens State --- */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar for game container screen overflow */
+.screen::-webkit-scrollbar {
+    width: 4px;
+}
+.screen::-webkit-scrollbar-track {
+    background: transparent;
+}
+.screen::-webkit-scrollbar-thumb {
+    background: var(--border-neon);
+    border-radius: 2px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* --- Start Screen CSS --- */
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+    animation: logoGlow 3s ease-in-out infinite alternate;
+}
+
+.brand-logo i {
+    font-size: 36px;
+    color: var(--neon-cyan);
+}
+
+.brand-logo h1 {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-main);
+}
+
+.subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* Instructions card */
+.instructions-card {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-neon);
+    border-radius: var(--border-radius-md);
+    padding: 14px 20px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 16px;
+}
+
+.instructions-card h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--neon-cyan);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.instructions-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.instructions-card li {
+    font-size: 12px;
+    color: var(--text-main);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+}
+
+.instructions-card li i {
+    color: var(--neon-cyan);
+    font-size: 14px;
+    margin-top: 1px;
+}
+
+/* --- Leaderboard UI --- */
+.leaderboard-container {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 24px;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-neon);
+    border-radius: var(--border-radius-md);
+    padding: 12px;
+}
+
+.leaderboard-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    text-align: center;
+}
+
+.leaderboard-table th {
+    padding: 6px;
+    border-bottom: 1px solid var(--border-neon);
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.leaderboard-table td {
+    padding: 6px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    color: var(--text-main);
+}
+
+.leaderboard-table tr:last-child td {
+    border-bottom: none;
+}
+
+.leaderboard-table tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.leaderboard-table tr.rank-1 td.rank-cell {
+    color: var(--neon-cyan);
+    font-weight: 800;
+    text-shadow: 0 0 4px var(--neon-cyan-glow);
+}
+
+.leaderboard-table tr.rank-2 td.rank-cell {
+    color: var(--neon-purple);
+    font-weight: 700;
+}
+
+.leaderboard-table tr.rank-3 td.rank-cell {
+    color: var(--neon-pink);
+    font-weight: 700;
+}
+
+.empty-table-msg {
+    color: var(--text-muted);
+    font-size: 11px;
+    text-align: center;
+    padding: 15px 0 !important;
+}
+
+.leaderboard-container.result-version {
+    margin-bottom: 20px;
+}
+
+/* --- Score Save Box --- */
+.score-save-box {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 20px;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-neon);
+    padding: 14px;
+    border-radius: var(--border-radius-md);
+    box-sizing: border-box;
+}
+
+.score-save-box.hidden {
+    display: none;
+}
+
+.box-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+}
+
+.save-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.input-field-group {
+    display: flex;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.save-form input {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: var(--font-family);
+    font-size: 12px;
+    background-color: #ffffff;
+    border: 1.5px solid var(--border-neon);
+    border-radius: var(--border-radius-md);
+    color: var(--text-main);
+    outline: none;
+    transition: var(--transition);
+}
+
+.save-form input::placeholder {
+    color: var(--text-muted);
+}
+
+.save-form input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+
+.btn-save {
+    background-color: var(--text-main); /* Black button on light bg */
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    transition: var(--transition);
+}
+
+.btn-save:hover {
+    background-color: #424245;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 24px;
+    font-family: var(--font-family);
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: var(--border-radius-md);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-neon {
+    background-color: var(--text-main); /* Pure minimalist black button */
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.btn-neon:hover {
+    background-color: #424245;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.btn-neon:active {
+    transform: translateY(0);
+}
+
+.btn-restart-style {
+    margin-top: 5px;
+}
+
+/* --- Play Screen HUD --- */
+.hud-header {
+    width: 100%;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid var(--border-neon);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.hud-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hud-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.hud-value {
+    font-size: 18px;
+    font-weight: 800;
+    margin-top: 2px;
+}
+
+/* Specific colors for HUD values */
+.hud-item.time .hud-value { color: var(--neon-cyan); }
+.hud-item.hits .hud-value { color: var(--neon-green); }
+.hud-item.accuracy .hud-value { color: var(--neon-purple); }
+
+/* --- Play Zone --- */
+#play-zone {
+    width: 100%;
+    height: 100%;
+    padding-top: 60px; /* Offset HUD height */
+    position: relative;
+    cursor: crosshair; /* Precision crosshair cursor */
+    user-select: none;
+}
+
+/* --- Target Bullseye Element --- */
+.target {
+    position: absolute;
+    border-radius: 50%;
+    /* Indigo-blue concentric circles with high contrast coral center dot */
+    background: radial-gradient(circle, var(--neon-pink) 25%, transparent 26%),
+                radial-gradient(circle, transparent 45%, var(--neon-cyan) 46%, var(--neon-cyan) 56%, transparent 57%);
+    border: 2px solid var(--neon-cyan);
+    box-shadow: 0 4px 12px var(--neon-cyan-glow);
+    cursor: crosshair;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: targetSpawn 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    transform-origin: center;
+}
+
+/* Center dot inside target for accuracy alignment */
+.target::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+
+/* Expiring scale-out target animation (triggered via JS right before deletion) */
+.target.expiring {
+    animation: targetExpire 0.1s ease-out forwards;
+}
+
+/* --- Target Particles Explosion --- */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: var(--neon-cyan);
+    border-radius: 50%;
+    pointer-events: none; /* Do not block clicks */
+    z-index: 5;
+    animation: particleExplode 0.4s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+
+/* --- Result Screen CSS --- */
+.result-header {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.result-header i {
+    font-size: 36px;
+    color: var(--neon-cyan);
+    margin-bottom: 4px;
+    animation: trophyFloat 2s ease-in-out infinite;
+}
+
+.result-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.result-header .subtitle {
+    margin-bottom: 0px;
+}
+
+/* Stats Scorecard Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 12px;
+}
+
+.result-card {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-neon);
+    border-radius: var(--border-radius-md);
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.card-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.card-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 4px 0;
+}
+
+.card-desc {
+    font-size: 9px;
+    color: var(--text-muted);
+}
+
+/* Score evaluation rating */
+.rating-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+    border-top: 1px solid var(--border-neon);
+    padding-top: 12px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.rating-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.rating-value {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    letter-spacing: 2px;
+    margin-top: 2px;
+    text-shadow: 0 0 5px var(--neon-cyan-glow);
+}
+
+/* Footer manual styling */
+.app-footer {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.app-footer i {
+    font-size: 14px;
+}
+
+/* --- Animations --- */
+@keyframes logoGlow {
+    from {
+        filter: drop-shadow(0 0 2px var(--neon-cyan-glow));
+    }
+    to {
+        filter: drop-shadow(0 0 6px var(--neon-cyan-glow));
+    }
+}
+
+@keyframes targetSpawn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes targetExpire {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(0.2);
+        opacity: 0;
+    }
+}
+
+@keyframes particleExplode {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0.2);
+        opacity: 0;
+    }
+}
+
+@keyframes trophyFloat {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-4px) rotate(3deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* Responsive details */
+@media (max-width: 768px) {
+    #game-container {
+        aspect-ratio: auto;
+        height: 540px;
+    }
+    .brand-logo h1 { font-size: 30px; }
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    .result-card {
+        padding: 8px;
+    }
+    .save-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn-save {
+        width: 100%;
+    }
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AimPro | 프로게이머 에임 손풀기 연습기</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-wrapper">
+        <!-- Main Game Box -->
+        <div id="game-container">
+            
+            <!-- 1. Start Screen -->
+            <div id="start-screen" class="screen active">
+                <div class="brand-logo">
+                    <i class="ti ti-target-arrow"></i>
+                    <h1>AIMPRO</h1>
+                </div>
+                <p class="subtitle">프로게이머 손풀기용 10초 반응속도 & 에임 연습기</p>
+                
+                <div class="instructions-card">
+                    <h3>훈련 수칙</h3>
+                    <ul>
+                        <li><i class="ti ti-circle-check"></i> 화면에 무작위 크기로 생성되는 과녁을 빠르게 클릭하세요.</li>
+                        <li><i class="ti ti-alarm"></i> 제한 시간은 정확히 10초입니다.</li>
+                        <li><i class="ti ti-percentage"></i> 허공을 클릭하면 정확도(Accuracy)가 깎입니다. 신속하면서도 정확하게 조준하세요.</li>
+                    </ul>
+                </div>
+
+                <!-- Leaderboard on Start Screen -->
+                <div class="leaderboard-container">
+                    <h3 class="leaderboard-title"><i class="ti ti-medal"></i> 명예의 전당 (Top 5)</h3>
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th width="15%">순위</th>
+                                <th width="45%">닉네임</th>
+                                <th width="20%">격파수</th>
+                                <th width="20%">정확도</th>
+                            </tr>
+                        </thead>
+                        <tbody id="start-leaderboard-body">
+                            <!-- Injected by JS -->
+                            <tr><td colspan="4" class="empty-table-msg">기록이 없습니다. 첫 기록을 세워보세요!</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button id="btn-start" class="btn btn-neon">
+                    <i class="ti ti-player-play"></i>
+                    <span>훈련 시작 (START)</span>
+                </button>
+            </div>
+
+            <!-- 2. Play Screen -->
+            <div id="play-screen" class="screen">
+                <!-- Heads-Up Display (HUD) -->
+                <header class="hud-header">
+                    <div class="hud-item time">
+                        <span class="hud-label">시간 (TIME)</span>
+                        <span class="hud-value" id="hud-time">10.00s</span>
+                    </div>
+                    <div class="hud-item hits">
+                        <span class="hud-label">타겟 격파 (HITS)</span>
+                        <span class="hud-value" id="hud-hits">0</span>
+                    </div>
+                    <div class="hud-item accuracy">
+                        <span class="hud-label">정확도 (ACC)</span>
+                        <span class="hud-value" id="hud-accuracy">100%</span>
+                    </div>
+                </header>
+
+                <!-- Target Spawning Arena -->
+                <div id="play-zone">
+                    <!-- Dynamic target circles and particles are spawned here by JS -->
+                </div>
+            </div>
+
+            <!-- 3. Result Screen -->
+            <div id="result-screen" class="screen">
+                <div class="result-header">
+                    <i class="ti ti-trophy"></i>
+                    <h2>훈련 종료</h2>
+                    <p class="subtitle">에임 분석 리포트</p>
+                </div>
+
+                <!-- Statistics Scorecard Grid -->
+                <div class="stats-grid">
+                    <div class="result-card">
+                        <span class="card-label">총 격파 수 (Hits)</span>
+                        <span class="card-value" id="result-hits">0</span>
+                        <span class="card-desc">격파한 타겟 수</span>
+                    </div>
+                    <div class="result-card">
+                        <span class="card-label">정확도 (Accuracy)</span>
+                        <span class="card-value" id="result-accuracy">0%</span>
+                        <span class="card-desc">클릭 성공률</span>
+                    </div>
+                    <div class="result-card">
+                        <span class="card-label">초당 격파 수 (TPS)</span>
+                        <span class="card-value" id="result-tps">0.00</span>
+                        <span class="card-desc">Targets Per Second</span>
+                    </div>
+                </div>
+
+                <!-- Gamer Rating Rating Card -->
+                <div class="rating-box">
+                    <span class="rating-label">에이머 등급</span>
+                    <span class="rating-value" id="result-rating">PRO</span>
+                </div>
+
+                <!-- Save Score Form Container -->
+                <div id="score-save-container" class="score-save-box">
+                    <h4 class="box-title"><i class="ti ti-device-floppy"></i> 명예의 전당 기록 등록</h4>
+                    <form id="score-save-form" class="save-form">
+                        <div class="input-field-group">
+                            <input type="text" id="player-name" placeholder="닉네임" required autocomplete="off" maxlength="10">
+                            <input type="password" id="player-password" placeholder="비밀번호 (4자)" required autocomplete="off" maxlength="8">
+                        </div>
+                        <button type="submit" class="btn btn-save">
+                            <span>기록 저장</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Leaderboard on Result Screen -->
+                <div class="leaderboard-container result-version">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th width="15%">순위</th>
+                                <th width="45%">닉네임</th>
+                                <th width="20%">격파수</th>
+                                <th width="20%">정확도</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result-leaderboard-body">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <button id="btn-restart" class="btn btn-neon btn-restart-style">
+                    <i class="ti ti-refresh"></i>
+                    <span>다시 훈련하기 (RESTART)</span>
+                </button>
+            </div>
+
+        </div>
+        
+        <!-- Bottom Github manual badge -->
+        <footer class="app-footer">
+            <p><i class="ti ti-brand-github"></i> 이 프로젝트는 그대로 GitHub Pages에 업로드하여 배포할 수 있습니다.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
